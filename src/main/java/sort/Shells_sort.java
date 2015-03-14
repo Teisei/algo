@@ -1,5 +1,7 @@
 package sort;
 
+import structure.domain.Person;
+
 /**
  * 希尔排序:O(n^1.2)
  * Created by dingcheng on 2015/3/10.
@@ -29,6 +31,30 @@ public class Shells_sort implements MySort {
         return a;
     }
 
+    @Override
+    public void sortObject(Comparable[] a, int n) {
+        /* 步长 */
+        for (int gap = n / 2; gap > 0; gap /= 2) {
+            /* 直接插入排序 */
+            for (int start = 0; start < gap; start++) {
+                /* 每一组进行插入排序 */
+                for (int j = start + gap; j < n; j += gap) {
+                    if (a[j].compareTo(a[j-gap]) < 0) {
+                        //从 j 往前
+                        Comparable temp = a[j];
+                        int k = j - gap;
+                        while (k >= 0 && temp.compareTo(a[k]) < 0) {
+                            a[k + gap] = a[k];
+                            k -= gap;
+                        }
+                        //结束之后，将a[j]定位
+                        a[k + gap] = temp;
+                    }
+                }
+            }
+        }
+    }
+
     public static void main(String args[]) {
 //        int[] a = {49, 38, 65, 97, 26, 13, 27, 49, 55, 4};
         int[] a = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
@@ -36,6 +62,16 @@ public class Shells_sort implements MySort {
         a = mySort.sort(a, a.length);
         for (int i = 0; i < a.length; i++) {
             System.out.print(a[i]+"  ");
+        }
+
+        System.out.println("\n\n************ test2 *************");
+        Person persons[] = new Person[a.length];
+        for (int i = 0; i < a.length; i++) {
+            persons[i] = new Person(""+a[i]);
+        }
+        mySort.sortObject(persons, persons.length - 1);
+        for (int i = 0; i < persons.length; i++) {
+            System.out.print(persons[i].getName()+"  ");
         }
     }
 }

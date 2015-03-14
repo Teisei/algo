@@ -109,6 +109,11 @@ public class Heap_sort implements MySort {
         return a;
     }
 
+    @Override
+    public void sortObject(Comparable[] a, int n) {
+
+    }
+
     public static void main(String args[]) {
 //        int sort[] = {0, 2, 1};
         System.out.println("\n*********************");
