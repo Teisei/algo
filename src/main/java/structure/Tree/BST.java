@@ -10,15 +10,18 @@ public class BST<T extends Comparable<? super T>> {
      */
     public class BinaryNode {
         public T element;
+        BinaryNode parent;
         BinaryNode left;
         BinaryNode right;
         public BinaryNode(T elem) {
             element = elem;
             left = null;
             right = null;
+            parent = null;
         }
-        public BinaryNode(T elem, BinaryNode lt, BinaryNode rt) {
+        public BinaryNode(T elem,BinaryNode p, BinaryNode lt, BinaryNode rt) {
             element = elem;
+            parent = p;
             left = lt;
             right = rt;
         }
@@ -43,10 +46,10 @@ public class BST<T extends Comparable<? super T>> {
     /**
      * search an element in the BST --- O(h)
      */
-    public T search(T elem) {
+    public BinaryNode search(T elem) {
 //        BinaryNode found = search(root, elem);//
         BinaryNode found = search_iterative(root, elem);
-        return (found == null) ? null : found.element;
+        return (found == null) ? null : found;
     }
     /** search the element giving the key */
     public BinaryNode search(BinaryNode start, T elem) {
@@ -85,7 +88,7 @@ public class BST<T extends Comparable<? super T>> {
         // We've reached the point of insertion
         if (start == null) {
             // Insert our element into a new node
-            root = new BinaryNode(elem, null, null);
+            root = new BinaryNode(elem, null, null, null);
             return true;
         }
 
@@ -93,14 +96,14 @@ public class BST<T extends Comparable<? super T>> {
 
         if (comparison > 0) {
             if (start.left == null) {
-                start.left = new BinaryNode(elem, null, null);
+                start.left = new BinaryNode(elem, start, null,null);
                 return true;
             }
             return insert(start.left, elem);
         }
         else if (comparison < 0) {
             if (start.right == null) {
-                start.right = new BinaryNode(elem, null, null);
+                start.right = new BinaryNode(elem, start, null, null);
                 return true;
             }
             return insert(start.right, elem);
@@ -126,17 +129,67 @@ public class BST<T extends Comparable<? super T>> {
             }
         }
         if (y == null) {
-            root = new BinaryNode(z, null, null);
+            root = new BinaryNode(z,null, null, null);
             return true;
         }
         if (comparison < 0) {
-            y.left = new BinaryNode(z, null, null);
+            y.left = new BinaryNode(z,y, null, null);
         } else if (comparison > 0) {
-            y.right = new BinaryNode(z, null, null);
+            y.right = new BinaryNode(z,y, null, null);
         } else {
             return false;
         }
         return true;
+    }
+
+    /**
+     * get the minimun node under Node u.
+     */
+    public BinaryNode minimum(BinaryNode u) {
+        while (u.left != null) {
+            u = u.left;
+        }
+        return u;
+    }
+
+    /**
+     * replace u with v, and delete u.
+     */
+    public boolean transplant(BinaryNode u, BinaryNode v) {
+        if (u.parent == null) {
+            this.root = v;
+        }else if (u == u.parent.left) {
+            u.parent.left = v;
+        } else {
+            u.parent.right = v;
+        }
+        if (v != null) {
+            v.parent = u.parent;
+        }
+        return true;
+    }
+
+    /**
+     * delete a node from the tree.
+     */
+    public boolean delete(BinaryNode z) {
+        if (z.left == null) {
+            transplant(z, z.right);
+        }else if (z.right == null) {
+            transplant(z, z.left);
+        } else {
+            BinaryNode y = minimum(z.right);
+            if (y.parent != z) {
+                //we need to
+                transplant(y, y.right);
+                y.right = z.right;
+                y.right.parent = y;
+            }
+            transplant(z, y);
+            y.left = z.left;
+            y.left.parent = y;
+        }
+        return false;
     }
 
 
@@ -306,16 +359,16 @@ public class BST<T extends Comparable<? super T>> {
     public void print(BinaryNode start, int order) {
         if (start != null) {
             if (order == -1) {
-                System.out.print(start.element+" ");
+                System.out.print(start.element + " ");
                 print(start.left, order);
                 print(start.right, order);
             }else if (order == -1) {
                 print(start.left, order);
                 print(start.right, order);
-                System.out.print(start.element+" ");
+                System.out.print(start.element + " ");
             }else{
                 print(start.left, order);
-                System.out.print(start.element+" ");
+                System.out.print(start.element + " ");
                 print(start.right, order);
             }
         }

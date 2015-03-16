@@ -51,6 +51,15 @@ public class Test_BST {
         tree.insert(nums[9]);
         tree.print();
         System.out.println("**************************");
+        BST.BinaryNode node = tree.search(nums[3]);
+        tree.delete(node);
+        tree.print();
+        System.out.println("**************************");
+        BST.BinaryNode node2 = tree.search(nums[7]);
+        tree.delete(node2);
+        tree.print();
+        System.out.println("**************************");
+
 
     }
 }
