@@ -126,5 +126,22 @@ public class Merge_sort implements MySort {
         for (int i = 0; i < persons.length; i++) {
             System.out.print(persons[i].getName()+"  ");
         }
+
+        System.out.println("\n\n************ test2 *************");
+        Integer[] nums = new Integer[10];
+        nums[0] = 10;
+        nums[1] = 9;
+        nums[2] = 8;
+        nums[3] = 7;
+        nums[4] = 6;
+        nums[5] = 5;
+        nums[6] = 4;
+        nums[7] = 3;
+        nums[8] = 2;
+        nums[9] = 1;
+        mysort.sortObject(nums, nums.length - 1);
+        for (int i = 0; i < persons.length; i++) {
+            System.out.print(nums[i]+"  ");
+        }
     }
 }
