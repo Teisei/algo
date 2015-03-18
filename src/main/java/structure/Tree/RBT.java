@@ -165,7 +165,7 @@ public class RBT<T extends Comparable<? super T>>{
     }
     public boolean insert_iterative(BinaryNode start, BinaryNode z) {
         BinaryNode y = NIL;
-        BinaryNode x = root;
+        BinaryNode x = start;
         while (x != NIL) {
             y = x;
             int comparison = z.element.compareTo(x.element);
@@ -194,18 +194,24 @@ public class RBT<T extends Comparable<? super T>>{
             if (z.parent == z.parent.parent.left) {
                 BinaryNode y = z.parent.parent.right;
                 if (y.color.equals("red")) {
+                    //cousin is red, means p is black
+                    //cannot rotate from the p'p
+                    //p->red, z and cousin->black
                     z.parent.color = "black";
                     y.color = "black";
                     z.parent.parent.color = "red";
                     z = z.parent.parent;
                 } else{
                     if (z == z.parent.right) {
+                        //left'right is heavy, cannot rotate
                         z = z.parent;
                         left_rotate(z);
+                    }else{
+                        //left'left is heavy, rotate from p'p
+                        z.parent.color = "black";
+                        z.parent.parent.color = "red";
+                        right_rotate(z.parent.parent);
                     }
-                    z.parent.color = "black";
-                    z.parent.parent.color = "red";
-                    right_rotate(z.parent.parent);
                 }
             } else {
                 //same as then clause with "right" and "left" exchanged
@@ -215,14 +221,15 @@ public class RBT<T extends Comparable<? super T>>{
                     y.color = "black";
                     z.parent.parent.color = "red";
                     z = z.parent.parent;
-                } else{
+                } else {
                     if (z == z.parent.left) {
                         z = z.parent;
                         right_rotate(z);
+                    } else {
+                        z.parent.color = "black";
+                        z.parent.parent.color = "red";
+                        left_rotate(z.parent.parent);
                     }
-                    z.parent.color = "black";
-                    z.parent.parent.color = "red";
-                    left_rotate(z.parent.parent);
                 }
             }
         }
@@ -277,6 +284,7 @@ public class RBT<T extends Comparable<? super T>>{
             y.color = z.color;
         }
         if (y_original_color.equals("black")) {
+            //only: y(black),
             RB_delete_fixup(x);
         }
         return true;

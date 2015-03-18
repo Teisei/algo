@@ -12,7 +12,7 @@ import java.util.Date;
 public class Test_RBT {
     @Test
     public void testRBT() {
-        int N = 50;
+        int N = 500;
         Integer[] nums = new Integer[N];
         for (int i = 0; i < N; i++) {
             nums[i] = i;
