@@ -76,6 +76,50 @@ public class BST<T extends Comparable<? super T>> {
     }
 
 
+    /* get the minimun node under Node u. */
+    public BinaryNode minimum(BinaryNode u) {
+        while (u.left != null) {
+            u = u.left;
+        }
+        return u;
+    }
+    /* get the maximum node under Node u */
+    public BinaryNode maximum(BinaryNode u) {
+        while (u.right != null) {
+            u = u.right;
+        }
+        return u;
+    }
+
+    /* get the successor of Node u */
+    public BinaryNode successor(BinaryNode u) {
+        if (u.right != null) {
+            return minimum(u.right);
+        }
+        BinaryNode x = u.parent;
+        while (x != null && u == x.right) {
+            u = x;
+            x = u.parent;
+        }
+        //it's in the left sub-tree of the parent
+        return x;
+    }
+    /* get the predecessor of Node u */
+    public BinaryNode predecessor(BinaryNode u) {
+        if (u.left != null) {
+            return maximum(u.left);
+        }
+        BinaryNode x = u.parent;
+        while (x != null && u == x.left) {
+            u = x;
+            x = u.parent;
+        }
+        //it's in the right sub-tree of the parent
+        return x;
+    }
+
+
+
     /**
      * Inserts an element into the BST, unless it is already stored.
      * O(h).
@@ -142,15 +186,6 @@ public class BST<T extends Comparable<? super T>> {
         return true;
     }
 
-    /**
-     * get the minimun node under Node u.
-     */
-    public BinaryNode minimum(BinaryNode u) {
-        while (u.left != null) {
-            u = u.left;
-        }
-        return u;
-    }
 
     /**
      * replace u with v, and delete u.
@@ -172,6 +207,10 @@ public class BST<T extends Comparable<? super T>> {
     /**
      * delete a node from the tree.
      */
+    public boolean delete(T elem) {
+        BinaryNode z = search(elem);
+        return delete(z);
+    }
     public boolean delete(BinaryNode z) {
         if (z.left == null) {
             transplant(z, z.right);
@@ -191,101 +230,6 @@ public class BST<T extends Comparable<? super T>> {
         }
         return false;
     }
-
-
-    /**
-     * This method deletes an element from the BST, if it is present.
-     */
-    public boolean remove(T elem) {
-        removalSuccesful = true;
-        root = remove(root, elem);
-        return removalSuccesful;
-    }
-
-    /**
-     * Deletes an element from the BST, if it is present. *
-     */
-    public BinaryNode remove(BinaryNode start, T elem) {
-        // If the element we want to delete wasn't found
-        if (start == null) {
-            // the element we wanted to delete wasn't found
-            removalSuccesful = false;
-            return null;
-        }
-
-        // Compare the current node's element to the element we're looking for
-        int comparison = start.element.compareTo(elem);
-
-        // If the deletion will happen somewhere down the left tree
-        if (comparison > 0) {
-            // Attempt to delete down the left tree
-            start.left = remove(start.left, elem);
-        }
-        // If the deletion will happen somewhere down the right tree
-        else if (comparison < 0) {
-            // Attempt to delete down the right tree
-            start.right = remove(start.right, elem);
-        }
-        // If we are at the element we want to delete
-        else {
-            // If the node we want to delete has two children
-            if (start.left != null && start.right != null) {
-                // Back up pointers
-                BinaryNode left = start.left;
-                BinaryNode right = start.right;
-
-                // current element<->smallest element in right subtree
-                start = moveMin(start.right, start);
-
-                // Back up pointer
-                BinaryNode minRight = start.right;
-
-                // Fix pointers
-                start.left = left;
-                start.right = right;
-
-                // We need to fix start.right if it points to the node we just
-                // moved
-                if (start.right.element == start.element) {
-                    start.right = minRight;
-                }
-            }
-            // If the node we want to delete is a leaf
-            else if (start.left == null && start.right == null) {
-                // Delete the current node from the tree
-                start = null;
-            }
-            // If the node we want to delete just has a left child
-            else if (start.left != null) {
-                start = start.left;
-            }
-            // If the node we want to delete just has a right child
-            else {
-                start = start.right;
-            }
-        }
-        return start;
-    }
-    /**
-     * find the minimum in sub-tree: start
-     */
-    public BinaryNode moveMin(BinaryNode start, BinaryNode parent) {
-        // If there is nothing to traverse or remove
-        if (start == null) {
-            return null;
-        }
-        //found the minimum node, [start.left]
-        if (start.left == null) {
-            // Rewire nodes
-            if (parent != root) {
-                parent.left = start.right; //deletedRight;
-            }
-            return start;
-        }
-        // Recurse until we get to the minimum node
-        return moveMin(start.left, start);
-    }
-
 
 
     /** This method returns the tree to an empty state. */
@@ -362,7 +306,7 @@ public class BST<T extends Comparable<? super T>> {
                 System.out.print(start.element + " ");
                 print(start.left, order);
                 print(start.right, order);
-            }else if (order == -1) {
+            }else if (order ==1) {
                 print(start.left, order);
                 print(start.right, order);
                 System.out.print(start.element + " ");

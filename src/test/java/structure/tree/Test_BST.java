@@ -1,65 +1,104 @@
 package structure.tree;
 
+import org.junit.Test;
 import structure.Tree.BST;
+import structure.Tree.RBT;
+
+import java.util.Date;
 
 /**
  * Created by dingcheng on 2015/3/16.
  */
 public class Test_BST {
-    public static void main(String args[]) {
-        Integer[] nums = new Integer[10];
-        nums[0] = 5;
-        nums[1] = 2;
-        nums[2] = 9;
-        nums[3] = 1;
-        nums[4] = 1;
-        nums[5] = 6;
-        nums[6] = 7;
-        nums[7] = 8;
-        nums[8] = 3;
-        nums[9] = 4;
+    @Test
+    public void testBST() {
+        int N = 10000;
+        Integer[] nums = new Integer[N];
+        for (int i = 0; i < N; i++) {
+            nums[i] = i;
+        }
+        BST<Integer> tree1 = new BST<Integer>();
 
-        BST<Integer> tree = new BST<Integer>();
+        Date start;
+        System.out.println("############### insert BST ###############");
+        start = new Date();
+        for (int i = 0; i < nums.length; i++) {
+            tree1.insert(nums[i]);
+        }
+        System.out.println(new Date().getTime() - start.getTime());
+        System.out.println("############### search BST ###############");
+        start = new Date();
+        for (int i = 0; i < nums.length; i++) {
+            tree1.search(nums[i]);
+        }
+        System.out.println(new Date().getTime() - start.getTime());
+        System.out.println("############### delete BST ###############");
+        start = new Date();
+        for (int i = 0; i < nums.length; i++) {
+            tree1.delete(nums[i]);
+        }
+        System.out.println(new Date().getTime() - start.getTime());
+    }
 
-        tree.insert(nums[0]);
-        tree.print();
-        System.out.println("**************************");
-        tree.insert(nums[1]);
-        tree.print();
-        System.out.println("**************************");
-        tree.insert(nums[2]);
-        tree.print();
-        System.out.println("**************************");
-        tree.insert(nums[3]);
-        tree.print();
-        System.out.println("**************************");
-        tree.insert(nums[4]);
-        tree.print();
-        System.out.println("**************************");
-        tree.insert(nums[5]);
-        tree.print();
-        System.out.println("**************************");
-        tree.insert(nums[6]);
-        tree.print();
-        System.out.println("**************************");
-        tree.insert(nums[7]);
-        tree.print();
-        System.out.println("**************************");
-        tree.insert(nums[8]);
-        tree.print();
-        System.out.println("**************************");
-        tree.insert(nums[9]);
-        tree.print();
-        System.out.println("**************************");
-        BST.BinaryNode node = tree.search(nums[3]);
-        tree.delete(node);
-        tree.print();
-        System.out.println("**************************");
-        BST.BinaryNode node2 = tree.search(nums[7]);
-        tree.delete(node2);
-        tree.print();
-        System.out.println("**************************");
 
+    /**
+     * Compare general Binary Search Tree and
+     * Red Black Tree.
+     */
+    @Test
+    public void testCompareBSTandRBT() {
+        int N = 10000;
+        Integer[] nums = new Integer[N];
+        for (int i = 0; i < N; i++) {
+            nums[i] = i;
+        }
+        BST<Integer> tree1 = new BST<Integer>();
+        RBT<Integer> tree2 = new RBT<Integer>();
+
+        Date start;
+        System.out.println("############### insert BST ###############");
+        start = new Date();
+        for (int i = 0; i < nums.length; i++) {
+            tree1.insert(nums[i]);
+        }
+        System.out.println(new Date().getTime() - start.getTime());
+        System.out.println("############### search BST ###############");
+        start = new Date();
+        for (int i = 0; i < nums.length; i++) {
+            tree1.search(nums[i]);
+        }
+        System.out.println(new Date().getTime() - start.getTime());
+        System.out.println("############### delete BST ###############");
+        start = new Date();
+        for (int i = 0; i < nums.length; i++) {
+            tree1.delete(nums[i]);
+        }
+        System.out.println(new Date().getTime() - start.getTime());
+
+
+
+
+
+
+        System.out.println("############### insert RBT ###############");
+        start = new Date();
+        for (int i = 0; i < nums.length; i++) {
+            tree2.insert(nums[i]);
+        }
+        System.out.println(new Date().getTime() - start.getTime());
+
+        System.out.println("############### search RBT ###############");
+        start = new Date();
+        for (int i = 0; i < nums.length; i++) {
+            tree2.search(nums[i]);
+        }
+        System.out.println(new Date().getTime() - start.getTime());
+        System.out.println("############### delete RBT ###############");
+        start = new Date();
+        for (int i = 0; i < nums.length; i++) {
+            tree2.delete(nums[i]);
+        }
+        System.out.println(new Date().getTime() - start.getTime());
 
     }
 }
